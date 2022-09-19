@@ -10,13 +10,18 @@ I can admit, just like many other people my age, that I use TikTok way more than
 from pyspark.ml.evaluation import RegressionEvaluator
 from pyspark.ml.recommendation import ALS
 from pyspark.sql import Row
+
 lines = spark.read.text("TEXT_FILE.txt").rdd
 parts = lines.map(lambda row: row.value.split("::"))
 liked_data = parts.map(lambda p: Row(COLUMN_1, COLUMN_2, like=like)
+
 liked_df = spark.createDataFrame(liked_data)
 (training, test) = liked_df.randomSplit([0.75, 0.25])
-als = ALS(maxIter=4, regParam=0.05, users="COLUMN_1", items="COLUMN_2", ratingCol="like",
+
+als = ALS(maxIter=4, regParam=0.05, users="COLUMN_1", 
+items="COLUMN_2", ratingCol="like",
           coldStartStrategy="drop")
+										
 model = als.fit(training)
 predictions = model.transform(test)
 evaluator = RegressionEvaluator(metricName="rmse", labelCol="like",
